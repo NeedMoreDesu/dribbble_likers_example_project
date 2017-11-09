@@ -70,14 +70,3 @@
   ((stop-execution))
   ((stop-execution))
   )
-
-(do
-  (future @(get-top10 "simplebits") (println "I'm done"))
-  (let [con (stop-execution)]
-    (def continue con)))
-
-(do
-  (continue)
-  (Thread/sleep 100)
-  (let [con (stop-execution)]
-    (def continue con)))
