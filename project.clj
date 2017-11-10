@@ -7,5 +7,5 @@
                   [clj-http "3.7.0"]
                   [cheshire "5.8.0"]
                   [org.clojure/tools.logging "0.4.0"]
-                  [org.clojure/tools.macro "0.1.2"]
-                  [org.clojure/core.async "0.3.443"]])
+                  [org.clojure/core.async "0.3.443"]]
+  :main dribbble-likers.core)
