@@ -80,13 +80,14 @@
 
 (defn get-followers-likes [user]
   (go
-    (let [ likes-chs (map
-                       (fn [user]
-                         (go { :user user :likes (<! (get-likes user)) }))
-                       (<! (get-followers user)))
-           ch-with-likes (async/merge likes-chs)
-           result-ch (async/into [] ch-with-likes) ]
-      (<! result-ch))))
+    (client/with-async-connection-pool {:timeout 5 :threads 4 :insecure? false :default-per-route 10}
+      (let [ likes-chs (map
+                         (fn [user]
+                           (go { :user user :likes (<! (get-likes user)) }))
+                         (<! (get-followers user)))
+             ch-with-likes (async/merge likes-chs)
+             result-ch (async/into [] ch-with-likes) ]
+        (<! result-ch)))))
 
 (defn get-top10 [user]
   (go (let [ likes (<! (get-followers-likes user)) ]
