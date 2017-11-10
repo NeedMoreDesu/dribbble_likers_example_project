@@ -39,25 +39,6 @@
   (def resume-all-requests resume-execution)
   (def current-futures current-futures))
 
-(swap!
-  current-futures
-  (fn [futures]
-    (let [ futures
-           (map
-             (fn [arg#]
-               (if (and
-                     (future? (:future arg#))
-                     (not (future-done? (:future arg#))))
-                 (do
-                   (future-cancel (:future arg#))
-                   (log/info "Future stopped from stop signal: " (:id arg#))
-                   (assoc arg# :future :cancelled))
-                 arg#))
-             futures)
-           filtered-futures#
-           (filter keep-alive-rule futures) ]
-      (set filtered-futures#))))
-
 (letfn [(parse [response]
           (if (= (-> response :status) 200)
             (->> response
